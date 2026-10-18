@@ -22,7 +22,11 @@ const bytea = customType<{ data: Buffer; driverData: Buffer }>({
 
 export const staff = pgTable("staff", {
   id: serial("id").primaryKey(),
+  // Nombre (de pila) y apellido por separado; el nombre completo se arma con fullName().
   name: text("name").notNull(),
+  lastName: text("last_name"),
+  // Cargo dentro del salón: Estilista, Manicurista, Recepcionista…
+  position: text("position"),
   username: text("username").unique(),
   passwordHash: text("password_hash"),
   role: text("role", { enum: ["owner", "staff"] }).notNull().default("staff"),

@@ -60,6 +60,7 @@ async function main() {
         username: "minerva",
         passwordHash: await bcrypt.hash(password, 10),
         role: "owner",
+        position: "Dueña",
         commissionPct: 0,
         color: "#C9A45C",
         specialty: "Dueña",

@@ -2,6 +2,7 @@ import "server-only";
 import { and, eq, gte, inArray, isNull, lt, ne, sql } from "drizzle-orm";
 import { db, schema } from "@/db";
 import { distributeDiscount, splitCommission } from "./money";
+import { fullName } from "./staff-name";
 import { endOfDay, localDate, startOfDay } from "./time";
 
 const { tickets, ticketItems, staff, advances, expenses, services } = schema;
@@ -109,7 +110,7 @@ export async function pendingBalances(staffId?: number): Promise<StaffBalance[]>
       const commission = it?.commission ?? 0;
       return {
         staffId: w.id,
-        name: w.name,
+        name: fullName(w),
         color: w.color,
         commissionPct: w.commissionPct,
         servicesCount: it?.count ?? 0,
@@ -168,7 +169,7 @@ export async function rangeSummary(from: string, toInclusive: string): Promise<R
   const staffRows = await db
     .select({
       staffId: ticketItems.staffId,
-      name: sql<string>`coalesce(${staff.name}, 'Venta del salón')`,
+      name: sql<string>`coalesce(trim(${staff.name} || ' ' || coalesce(${staff.lastName}, '')), 'Venta del salón')`,
       color: sql<string>`coalesce(${staff.color}, '#8a8a8a')`,
       count: sql<number>`count(*)::int`,
       gross: sql<number>`coalesce(sum(${ticketItems.netPrice}),0)::int`,
@@ -179,7 +180,7 @@ export async function rangeSummary(from: string, toInclusive: string): Promise<R
     .innerJoin(tickets, eq(tickets.id, ticketItems.ticketId))
     .leftJoin(staff, eq(staff.id, ticketItems.staffId))
     .where(paidInRange)
-    .groupBy(ticketItems.staffId, staff.name, staff.color)
+    .groupBy(ticketItems.staffId, staff.name, staff.lastName, staff.color)
     .orderBy(sql`sum(${ticketItems.netPrice}) desc`);
 
   const dayRows = await db

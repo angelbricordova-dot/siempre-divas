@@ -4,6 +4,7 @@ import { db, schema } from "@/db";
 import { TicketForm, type TFInitial } from "@/components/admin/ticket-form";
 import { Avatar, PageHeader, Pill } from "@/components/ui";
 import { requireOwner } from "@/lib/auth";
+import { fullName } from "@/lib/staff-name";
 import { getTicketWithItems, listCatalog, listClientsLite, listStaff, pendingTickets } from "@/lib/data";
 import { money, moneyInput } from "@/lib/money";
 import { localTime } from "@/lib/time";
@@ -107,7 +108,7 @@ export default async function CajaPage({ searchParams }: { searchParams: Promise
       )}
       <TicketForm
         key={initial?.ticketId ?? initial?.appointmentId ?? "new"}
-        staff={staff.map((s) => ({ id: s.id, name: s.name, color: s.color, commissionPct: s.commissionPct, role: s.role }))}
+        staff={staff.map((s) => ({ id: s.id, name: fullName(s), color: s.color, commissionPct: s.commissionPct, role: s.role }))}
         catalog={catalog.map((c) => ({
           id: c.id,
           name: c.name,

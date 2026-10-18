@@ -5,6 +5,7 @@ import { listCatalog, listStaff } from "@/lib/data";
 import { MSG } from "@/lib/messages";
 import { prettyPhone, waLink } from "@/lib/phone";
 import { getSettings } from "@/lib/settings";
+import { positionOf } from "@/lib/staff-name";
 import { localDate } from "@/lib/time";
 
 export const dynamic = "force-dynamic";
@@ -27,7 +28,7 @@ export default async function ReservarPage({ searchParams }: { searchParams: Pro
     .filter((c) => c.services.length);
   const people = staff
     .filter((s) => s.bookable && s.showOnSite)
-    .map((s) => ({ id: s.id, name: s.name, specialty: s.role === "owner" ? "Dueña" : s.specialty, categoryIds: s.categoryIds, daysOff: s.daysOff }));
+    .map((s) => ({ id: s.id, name: s.name, specialty: [positionOf(s), s.position ? s.specialty : null].filter(Boolean).join(" · ") || null, categoryIds: s.categoryIds, daysOff: s.daysOff }));
   const today = localDate();
 
   return (

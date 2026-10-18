@@ -14,6 +14,8 @@ export async function saveStaff(_: unknown, formData: FormData) {
     const id = Number(formData.get("id")) || null;
     const name = String(formData.get("name") ?? "").trim();
     if (name.length < 2) return { error: "Escribe el nombre." };
+    const lastName = String(formData.get("lastName") ?? "").trim() || null;
+    const position = String(formData.get("position") ?? "").trim() || null;
     const username = String(formData.get("username") ?? "").trim().toLowerCase() || null;
     const password = String(formData.get("password") ?? "");
     if (username) {
@@ -26,6 +28,8 @@ export async function saveStaff(_: unknown, formData: FormData) {
     if (password && password.length < 4) return { error: "La clave debe tener al menos 4 caracteres." };
     const values = {
       name,
+      lastName,
+      position,
       username,
       phone: normalizePhone(String(formData.get("phone") ?? "")),
       commissionPct: Math.min(100, Math.max(0, Number(formData.get("commissionPct")) || 0)),

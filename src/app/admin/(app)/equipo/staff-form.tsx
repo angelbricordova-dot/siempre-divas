@@ -3,14 +3,17 @@
 import { useActionState, useState } from "react";
 import { FormMessage, SubmitButton } from "@/components/admin/client-ui";
 import { Field, cx, inputClass, textareaClass } from "@/components/ui";
+import { POSITIONS } from "@/lib/staff-name";
 import { DAY_SHORT } from "@/lib/time";
 import { saveStaff } from "./actions";
 
-const COLORS = ["#C9A45C", "#C2185B", "#7B1FA2", "#1565C0", "#00897B", "#2E7D32", "#EF6C00", "#5D4037", "#E91E63", "#455A64"];
+const COLORS = ["#C2185B", "#1565C0", "#00897B", "#7B1FA2", "#EF6C00", "#2E7D32", "#C9A45C", "#5D4037", "#0097A7", "#AD1457", "#455A64", "#9E9D24"];
 
 type StaffRow = {
   id: number;
   name: string;
+  lastName: string | null;
+  position: string | null;
   username: string | null;
   role: "owner" | "staff";
   phone: string | null;
@@ -38,16 +41,46 @@ function Check({ name, label, hint, defaultChecked, disabled }: { name: string; 
   );
 }
 
-export function StaffForm({ staff, categories }: { staff?: StaffRow; categories: { id: number; name: string }[] }) {
+export function StaffForm({
+  staff,
+  categories,
+  usedColors = [],
+}: {
+  staff?: StaffRow;
+  categories: { id: number; name: string }[];
+  usedColors?: string[];
+}) {
   const [state, action] = useActionState(saveStaff, null);
-  const [color, setColor] = useState(staff?.color ?? COLORS[1]);
+  // A cada integrante nueva le toca un color que nadie usa, para distinguirlas en la agenda.
+  const used = usedColors.map((c) => c.toUpperCase());
+  const [color, setColor] = useState(staff?.color ?? COLORS.find((c) => !used.includes(c)) ?? COLORS[0]);
   const isOwner = staff?.role === "owner";
   return (
     <form action={action} className="space-y-3">
       {staff && <input type="hidden" name="id" value={staff.id} />}
       <input type="hidden" name="color" value={color} />
-      <Field label="Nombre">
-        <input name="name" defaultValue={staff?.name} required className={inputClass} />
+      <div className="grid grid-cols-2 gap-2">
+        <Field label="Nombre">
+          <input name="name" defaultValue={staff?.name} required autoComplete="off" className={inputClass} />
+        </Field>
+        <Field label="Apellido">
+          <input name="lastName" defaultValue={staff?.lastName ?? ""} autoComplete="off" className={inputClass} />
+        </Field>
+      </div>
+      <Field label="Cargo" hint="Elige uno de la lista o escribe otro.">
+        <input
+          name="position"
+          list="positions"
+          defaultValue={staff?.position ?? (isOwner ? "Dueña" : "")}
+          placeholder="Ej: Manicurista"
+          autoComplete="off"
+          className={inputClass}
+        />
+        <datalist id="positions">
+          {POSITIONS.map((p) => (
+            <option key={p} value={p} />
+          ))}
+        </datalist>
       </Field>
       <Field label="WhatsApp">
         <input name="phone" defaultValue={staff?.phone ? `0${staff.phone.slice(3)}` : ""} inputMode="tel" className={inputClass} />
@@ -72,7 +105,7 @@ export function StaffForm({ staff, categories }: { staff?: StaffRow; categories:
           ))}
         </div>
       </Field>
-      <Field label="Especialidad (se ve en la web)">
+      <Field label="Especialidad (opcional)" hint="Detalle que se ve al reservar, ej: uñas acrílicas y nail art.">
         <input name="specialty" defaultValue={staff?.specialty ?? ""} placeholder="Ej: Uñas acrílicas y nail art" className={inputClass} />
       </Field>
       <Field label="Sobre ella (opcional)">

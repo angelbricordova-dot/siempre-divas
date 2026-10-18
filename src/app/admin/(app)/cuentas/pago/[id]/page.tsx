@@ -4,6 +4,7 @@ import { eq } from "drizzle-orm";
 import { db, schema } from "@/db";
 import { PageHeader, buttonClass } from "@/components/ui";
 import { requireOwner } from "@/lib/auth";
+import { fullName } from "@/lib/staff-name";
 import { money } from "@/lib/money";
 import { waLink } from "@/lib/phone";
 import { localDate, prettyDate, shortDate } from "@/lib/time";
@@ -12,16 +13,17 @@ export default async function PayoutPage({ params }: { params: Promise<{ id: str
   await requireOwner();
   const id = Number((await params).id);
   const [row] = await db
-    .select({ p: schema.payouts, name: schema.staff.name, phone: schema.staff.phone })
+    .select({ p: schema.payouts, first: schema.staff.name, lastName: schema.staff.lastName, phone: schema.staff.phone })
     .from(schema.payouts)
     .innerJoin(schema.staff, eq(schema.staff.id, schema.payouts.staffId))
     .where(eq(schema.payouts.id, id));
   if (!row) notFound();
   const { p } = row;
+  const name = fullName({ name: row.first, lastName: row.lastName });
   const from = p.periodStart ? shortDate(localDate(p.periodStart)) : null;
   const to = shortDate(localDate(p.periodEnd));
   const text = [
-    `*Siempre Divas · Pago a ${row.name}*`,
+    `*Siempre Divas · Pago a ${name}*`,
     from ? `Del ${from} al ${to}` : `Al ${to}`,
     `Servicios: ${p.servicesCount} (${money(p.grossSales)} cobrados)`,
     `Comisión: ${money(p.commission)}`,
@@ -37,7 +39,7 @@ export default async function PayoutPage({ params }: { params: Promise<{ id: str
     <>
       <PageHeader title="Pago registrado" back={`/admin/cuentas/${p.staffId}`} subtitle={prettyDate(localDate(p.createdAt))} />
       <div className="mx-4 rounded-3xl bg-surface p-6 lg:mx-0">
-        <p className="text-[16px] text-muted">Pagado a {row.name}</p>
+        <p className="text-[16px] text-muted">Pagado a {name}</p>
         <p className="tabular text-[44px] leading-tight font-bold">{money(p.total)}</p>
         <dl className="tabular mt-4 space-y-2 text-[16px]">
           {from && (

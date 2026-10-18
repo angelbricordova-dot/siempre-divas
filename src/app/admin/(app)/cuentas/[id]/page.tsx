@@ -5,6 +5,7 @@ import { ConfirmButton } from "@/components/admin/client-ui";
 import { Avatar, Empty, PageHeader, Section, buttonClass, inputClass } from "@/components/ui";
 import { pendingBalances } from "@/lib/accounting";
 import { requireOwner } from "@/lib/auth";
+import { fullName, positionOf } from "@/lib/staff-name";
 import { money } from "@/lib/money";
 import { localDate, localTime, relativeDay, shortDate } from "@/lib/time";
 import { deleteAdvance, payStaff } from "../actions";
@@ -60,11 +61,15 @@ export default async function StaffAccountPage({ params }: { params: Promise<{ i
 
   return (
     <>
-      <PageHeader title={worker.name} back="/admin/cuentas" subtitle={`Gana el ${worker.commissionPct}% de cada servicio`} />
+      <PageHeader
+        title={fullName(worker)}
+        back="/admin/cuentas"
+        subtitle={`${positionOf(worker) ? `${positionOf(worker)} · ` : ""}gana el ${worker.commissionPct}% de cada servicio`}
+      />
 
       <div className="mx-4 rounded-3xl bg-ink p-5 text-bg lg:mx-0">
         <div className="flex items-center gap-3">
-          <Avatar name={worker.name} color={worker.color} size={44} />
+          <Avatar name={fullName(worker)} color={worker.color} size={44} />
           <div>
             <p className="text-[15px] opacity-70">A pagar hoy</p>
             <p className="tabular text-[38px] leading-none font-bold">{money(total)}</p>

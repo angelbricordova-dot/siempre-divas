@@ -8,6 +8,7 @@ import { money } from "@/lib/money";
 import { MSG } from "@/lib/messages";
 import { prettyPhone, waLink } from "@/lib/phone";
 import { getSettings } from "@/lib/settings";
+import { fullName, positionOf } from "@/lib/staff-name";
 import { DAY_NAMES, DAY_SHORT, localDate, prettyTime, relativeDay, shortDate } from "@/lib/time";
 
 export const dynamic = "force-dynamic";
@@ -288,8 +289,8 @@ export default async function Home() {
             <ul className="grid gap-x-16 gap-y-3 sm:grid-cols-2">
               {people.map((p, i) => (
                 <li key={p.id} data-reveal style={{ "--i": i } as React.CSSProperties} className="flex items-baseline justify-between gap-4 text-[16px]">
-                  <span>{p.name}</span>
-                  <span className="text-right text-[14px] text-[var(--ink-soft)]">{p.role === "owner" ? "Dueña" : (p.specialty ?? "")}</span>
+                  <span>{fullName(p)}</span>
+                  <span className="text-right text-[14px] text-[var(--ink-soft)]">{positionOf(p) ?? ""}</span>
                 </li>
               ))}
             </ul>

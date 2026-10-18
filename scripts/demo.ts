@@ -16,9 +16,9 @@ async function main() {
   const staff = await db
     .insert(schema.staff)
     .values([
-      { name: "Andrea Demo", username: "andrea", passwordHash: pass, commissionPct: 40, color: "#C2185B", specialty: "Uñas acrílicas y nail art", categoryIds: [cat("Uñas")], sort: 1 },
-      { name: "Valeria Demo", username: "valeria", passwordHash: pass, commissionPct: 45, color: "#1565C0", specialty: "Color y keratina", categoryIds: [cat("Cabello"), cat("Maquillaje")], daysOff: [1], sort: 2 },
-      { name: "Karla Demo", username: "karla", passwordHash: pass, commissionPct: 50, color: "#00897B", specialty: "Cejas, pestañas y depilación", categoryIds: [cat("Cejas y pestañas"), cat("Depilación"), cat("Uñas")], sort: 3 },
+      { name: "Andrea", lastName: "Demo", position: "Manicurista", username: "andrea", passwordHash: pass, commissionPct: 40, color: "#C2185B", specialty: "Uñas acrílicas y nail art", categoryIds: [cat("Uñas")], sort: 1 },
+      { name: "Valeria", lastName: "Demo", position: "Estilista", username: "valeria", passwordHash: pass, commissionPct: 45, color: "#1565C0", specialty: "Color y keratina", categoryIds: [cat("Cabello"), cat("Maquillaje")], daysOff: [1], sort: 2 },
+      { name: "Karla", lastName: "Demo", position: "Cosmetóloga", username: "karla", passwordHash: pass, commissionPct: 50, color: "#00897B", specialty: "Cejas, pestañas y depilación", categoryIds: [cat("Cejas y pestañas"), cat("Depilación"), cat("Uñas")], sort: 3 },
     ])
     .returning();
   const clients = await db
