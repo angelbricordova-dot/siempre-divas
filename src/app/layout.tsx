@@ -15,6 +15,9 @@ export const metadata: Metadata = {
   description:
     "Uñas, cabello, cejas, pestañas y maquillaje en Guayaquil (Chile y Febres Cordero). Reserva tu cita en línea en menos de un minuto.",
   applicationName: "Siempre Divas",
+  icons: {
+    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
+  },
   appleWebApp: { capable: true, title: "Siempre Divas", statusBarStyle: "black-translucent" },
   openGraph: {
     type: "website",

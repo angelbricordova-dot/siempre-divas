@@ -211,9 +211,13 @@ for (const [name, content] of Object.entries(files)) fs.writeFileSync(path.join(
 
 // Íconos de la app y favicon.
 const icon = Buffer.from(files["app-icon.svg"]);
-await sharp(icon, { density: 400 }).resize(512, 512).png().toFile("public/icon-512.png");
-await sharp(icon, { density: 400 }).resize(192, 192).png().toFile("public/icon-192.png");
-await sharp(icon, { density: 400 }).resize(180, 180).png().toFile("src/app/apple-icon.png");
+// Íconos opacos (sin transparencia): el iPhone los prefiere así para la pantalla de inicio.
+const opaque = (size) => sharp(icon, { density: 400 }).resize(size, size).flatten({ background: INK }).png();
+await opaque(512).toFile("public/icon-512.png");
+await opaque(192).toFile("public/icon-192.png");
+// iPhone busca estas rutas exactas además de la etiqueta <link rel="apple-touch-icon">.
+await opaque(180).toFile("public/apple-touch-icon.png");
+await opaque(180).toFile("public/apple-touch-icon-precomposed.png");
 fs.copyFileSync(path.join(OUT, "app-icon.svg"), "src/app/icon.svg");
 // Vista previa para revisar el logo en grande.
 await sharp(Buffer.from(files["logo-gold.svg"]), { density: 300 })
