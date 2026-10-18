@@ -52,7 +52,7 @@ export default async function AppointmentPage({ params }: { params: Promise<{ id
 
       <div className="mx-4 rounded-3xl bg-surface p-5 lg:mx-0">
         <p className="text-[15px] text-muted">{relativeDay(date)}</p>
-        <p className="tabular text-[32px] leading-tight font-bold">
+        <p className="tabular text-[26px] leading-tight font-bold">
           {prettyTime(time)} – {prettyTime(localTime(a.endsAt))}
         </p>
         <ul className="mt-4 space-y-1.5">

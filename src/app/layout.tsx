@@ -38,7 +38,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="es-EC" className={tiktok.variable}>
+    <html lang="es-EC" className={tiktok.variable} suppressHydrationWarning>
       <body>{children}</body>
     </html>
   );

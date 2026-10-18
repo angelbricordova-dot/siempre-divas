@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { eq } from "drizzle-orm";
 import { db, schema } from "@/db";
@@ -77,9 +78,9 @@ export default async function PayoutPage({ params }: { params: Promise<{ id: str
             Enviar comprobante por WhatsApp
           </a>
         )}
-        <a href="/admin/cuentas" className={buttonClass("secondary", "lg")}>
+        <Link href="/admin/cuentas" className={buttonClass("secondary", "lg")}>
           Volver a cuentas
-        </a>
+        </Link>
       </div>
     </>
   );

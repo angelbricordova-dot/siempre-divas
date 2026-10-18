@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import { IconBell } from "./icons";
 
 const KEY = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY;
@@ -18,20 +18,24 @@ export function RegisterSW() {
   return null;
 }
 
+const noop = () => () => {};
+function supportSnapshot() {
+  if (!KEY || !("serviceWorker" in navigator) || !("PushManager" in window)) return "unsupported";
+  return Notification.permission === "denied" ? "denied" : "ok";
+}
+
 export function PushToggle() {
-  const [state, setState] = useState<"idle" | "on" | "busy" | "denied" | "unsupported">("idle");
+  const support = useSyncExternalStore(noop, supportSnapshot, () => "unsupported");
+  const [current, setState] = useState<"idle" | "on" | "busy" | "denied">("idle");
+  const state = support === "ok" ? current : support === "denied" && current === "idle" ? "denied" : support === "unsupported" ? "unsupported" : current;
 
   useEffect(() => {
-    if (!KEY || !("serviceWorker" in navigator) || !("PushManager" in window)) {
-      setState("unsupported");
-      return;
-    }
-    if (Notification.permission === "denied") setState("denied");
+    if (support !== "ok") return;
     navigator.serviceWorker.ready
       .then((reg) => reg.pushManager.getSubscription())
       .then((sub) => sub && setState("on"))
       .catch(() => {});
-  }, []);
+  }, [support]);
 
   async function enable() {
     try {

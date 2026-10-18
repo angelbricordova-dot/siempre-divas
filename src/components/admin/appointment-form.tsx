@@ -31,7 +31,7 @@ export function AppointmentForm({
   const [category, setCategory] = useState<number>(catalog[0]?.id ?? 0);
   const [staffId, setStaffId] = useState<number | null>(role === "staff" ? currentUserId : null);
   const [date, setDate] = useState(defaultDate);
-  const [slots, setSlots] = useState<Slot[] | null>(null);
+  const [result, setResult] = useState<{ key: string; slots: Slot[] } | null>(null);
   const [time, setTime] = useState("");
   const [manual, setManual] = useState(false);
   const [name, setName] = useState("");
@@ -44,20 +44,20 @@ export function AppointmentForm({
   const chosen = selected.map((id) => services.find((s) => s.id === id)!).filter(Boolean);
   const total = chosen.reduce((a, s) => a + s.price, 0);
 
+  const slotKey = selected.length && date ? `${date}|${selected.join(",")}|${staffId ?? ""}` : "";
+  const slots = result && result.key === slotKey ? result.slots : null;
+
   useEffect(() => {
-    if (!selected.length || !date) {
-      setSlots(null);
-      return;
-    }
+    if (!slotKey) return;
     const ctrl = new AbortController();
     const p = new URLSearchParams({ date, services: selected.join(","), admin: "1" });
     if (staffId) p.set("staff", String(staffId));
     fetch(`/api/slots?${p}`, { signal: ctrl.signal })
       .then((r) => r.json())
-      .then((d) => setSlots(d.slots ?? []))
+      .then((d) => setResult({ key: slotKey, slots: d.slots ?? [] }))
       .catch(() => {});
     return () => ctrl.abort();
-  }, [selected, date, staffId]);
+  }, [slotKey, selected, date, staffId]);
 
   const matches = useMemo(() => {
     const q = name.trim().toLowerCase();
@@ -138,7 +138,10 @@ export function AppointmentForm({
         <div className="flex flex-wrap gap-1.5">
           <button
             type="button"
-            onClick={() => setStaffId(null)}
+            onClick={() => {
+              setStaffId(null);
+              setTime("");
+            }}
             className={cx("press h-11 rounded-full px-4 text-[15px] font-medium", staffId === null ? "bg-ink text-bg" : "bg-surface")}
           >
             Quien esté libre
@@ -147,7 +150,10 @@ export function AppointmentForm({
             <button
               key={s.id}
               type="button"
-              onClick={() => setStaffId(s.id)}
+              onClick={() => {
+                setStaffId(s.id);
+                setTime("");
+              }}
               className={cx("press inline-flex h-11 items-center gap-2 rounded-full px-4 text-[15px] font-medium", staffId === s.id ? "bg-ink text-bg" : "bg-surface")}
             >
               <span className="h-2.5 w-2.5 rounded-full" style={{ background: s.color }} />

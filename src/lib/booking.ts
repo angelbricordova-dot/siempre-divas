@@ -18,7 +18,10 @@ export async function eligibleStaff(date: string, categoryIds: number[]) {
     .from(schema.staff)
     .where(and(eq(schema.staff.active, true), eq(schema.staff.bookable, true)))
     .orderBy(schema.staff.sort, schema.staff.name);
-  return rows.filter((w) => !w.daysOff.includes(wd) && canDo(w, categoryIds));
+  // La dueña queda al final: "quien esté libre" asigna primero al equipo.
+  return rows
+    .filter((w) => !w.daysOff.includes(wd) && canDo(w, categoryIds))
+    .sort((a, b) => Number(a.role === "owner") - Number(b.role === "owner"));
 }
 
 export async function getSlots(opts: {

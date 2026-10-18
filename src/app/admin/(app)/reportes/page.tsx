@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { and, eq, gte, lt, sql } from "drizzle-orm";
+import { and, gte, lt, sql } from "drizzle-orm";
 import { db, schema } from "@/db";
 import { DayChart } from "@/components/admin/day-chart";
 import { Avatar, Empty, PageHeader, Section, Stat, buttonClass, cx } from "@/components/ui";

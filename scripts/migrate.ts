@@ -8,7 +8,8 @@ import * as schema from "../src/db/schema";
 import { DEFAULT_CATALOG, DEFAULT_SETTINGS } from "../src/lib/defaults";
 
 async function main() {
-  const url = process.env.DATABASE_URL;
+  // Neon recomienda la conexión directa (sin pooler) para migraciones.
+  const url = process.env.DATABASE_URL_UNPOOLED || process.env.DATABASE_URL;
   if (!url) {
     console.warn("⚠️  DATABASE_URL no está definida: se omiten las migraciones.");
     return;
