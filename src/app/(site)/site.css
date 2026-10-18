@@ -1,4 +1,4 @@
-/* Web pública: blanco y dorado. Títulos en Bodoni Moda (como el logo), textos en Jost. */
+/* Web pública: blanco y dorado. Títulos en Josefin Sans, textos en Jost. */
 body:has(.site) {
   background: #ffffff;
 }
@@ -32,15 +32,16 @@ body:has(.site) {
   color: inherit;
 }
 
-/* Títulos en Bodoni Moda */
+/* Títulos en Josefin Sans */
 .site .display {
   font-family: var(--font-display);
-  font-weight: 400;
-  letter-spacing: -0.015em;
-  line-height: 1.02;
+  font-weight: 300;
+  letter-spacing: -0.01em;
+  line-height: 1.1;
 }
+/* El énfasis va en dorado, sin cursiva. */
 .site .display em {
-  font-style: italic;
+  font-style: normal;
 }
 
 .site .gold {

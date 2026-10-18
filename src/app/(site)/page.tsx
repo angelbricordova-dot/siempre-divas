@@ -101,7 +101,7 @@ export default async function Home() {
         {/* ── Portada ─────────────────────────────────────────────────── */}
         <section className="grid items-center gap-10 px-[var(--margin)] pt-6 pb-16 md:grid-cols-12 md:pt-10 md:pb-24">
           <div className="md:col-span-6">
-            <h1 data-rise className="display text-[clamp(44px,6vw,88px)]">
+            <h1 data-rise className="display text-[clamp(44px,6vw,88px)] leading-[1.02]">
               Siempre lista,
               <br />
               <em className="gold">siempre diva.</em>

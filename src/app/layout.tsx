@@ -1,16 +1,10 @@
 import type { Metadata, Viewport } from "next";
-import { Bodoni_Moda, Jost } from "next/font/google";
+import { Josefin_Sans, Jost } from "next/font/google";
 import "./globals.css";
 
-// Textos: Jost (geométrica clásica de belleza). Títulos: Bodoni Moda, la misma familia del logo.
+// Textos: Jost. Títulos: Josefin Sans (geométrica y femenina), elegida por la clienta.
 const jost = Jost({ subsets: ["latin"], variable: "--font-jost", display: "swap" });
-const bodoni = Bodoni_Moda({
-  subsets: ["latin"],
-  style: ["normal", "italic"],
-  axes: ["opsz"],
-  variable: "--font-bodoni",
-  display: "swap",
-});
+const josefin = Josefin_Sans({ subsets: ["latin"], variable: "--font-josefin", display: "swap" });
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://siempredivas.vercel.app"),
@@ -41,7 +35,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="es-EC" className={`${jost.variable} ${bodoni.variable}`} suppressHydrationWarning>
+    <html lang="es-EC" className={`${jost.variable} ${josefin.variable}`} suppressHydrationWarning>
       <body>{children}</body>
     </html>
   );

@@ -110,6 +110,6 @@ El logo es 100 % vectorial (`public/brand/`), con el texto convertido a trazos. 
 
 Cada una existe en dorado, dorado profundo (para fondo blanco), marfil y negro.
 
-Tipografía: Bodoni Moda (la del logo) en los títulos y Jost en los textos, ambas con licencia OFL. Colores de la web: blanco, champán y dorado (`#C9A45C`), con dorado profundo (`#8C6A2E`) para textos.
+Tipografía de la web: Josefin Sans en los títulos y Jost en los textos, ambas con licencia OFL. El logo usa Bodoni Moda. Colores de la web: blanco, champán y dorado (`#C9A45C`), con dorado profundo (`#8C6A2E`) para textos.
 
 Para probar el panel paso a paso: [`docs/probar-panel.md`](docs/probar-panel.md).
