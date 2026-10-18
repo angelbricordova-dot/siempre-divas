@@ -15,6 +15,13 @@
       "when": 1792285596502,
       "tag": "0001_staff_last_name_position",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1792289390816,
+      "tag": "0002_gallery_categories",
+      "breakpoints": true
     }
   ]
 }

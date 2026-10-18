@@ -73,3 +73,30 @@ export async function getStaff(id: number) {
   const [row] = await db.select().from(schema.staff).where(and(eq(schema.staff.id, id)));
   return row ?? null;
 }
+
+/** Fotos de la galería de trabajos, las destacadas primero. */
+export async function listWorks(limit = 200) {
+  const rows = await db
+    .select({
+      id: schema.media.id,
+      alt: schema.media.alt,
+      categoryId: schema.media.categoryId,
+      featured: schema.media.featured,
+      staffId: schema.media.staffId,
+      staffFirst: schema.staff.name,
+      staffLast: schema.staff.lastName,
+    })
+    .from(schema.media)
+    .leftJoin(schema.staff, eq(schema.staff.id, schema.media.staffId))
+    .where(eq(schema.media.kind, "gallery"))
+    .orderBy(desc(schema.media.featured), asc(schema.media.sort), desc(schema.media.createdAt))
+    .limit(limit);
+  return rows.map((r) => ({
+    id: r.id,
+    alt: r.alt,
+    categoryId: r.categoryId,
+    featured: r.featured,
+    staffId: r.staffId,
+    staffName: r.staffFirst ? [r.staffFirst, r.staffLast].filter(Boolean).join(" ") : null,
+  }));
+}

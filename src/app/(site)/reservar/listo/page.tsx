@@ -36,13 +36,15 @@ export default async function ListoPage({ searchParams }: { searchParams: Promis
     <main className="px-[var(--margin)] pt-[max(env(safe-area-inset-top),20px)] pb-20">
       <Link href="/" aria-label="Volver al inicio">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/brand/logo-horizontal-ivory.svg" alt="Siempre Divas" className="h-9 w-auto" />
+        <img src="/brand/logo-horizontal-deep.svg" alt="Siempre Divas" className="h-9 w-auto" />
       </Link>
-      <h1 className="wide mt-16 text-[clamp(56px,13vw,180px)] text-[var(--accent)]">¡Listo!</h1>
-      <p className="mt-6 max-w-[30ch] text-[var(--step-lead)] leading-[1.3]">
+      <h1 className="display mt-14 text-[clamp(56px,10vw,128px)]">
+        ¡Lista, <em className="gold">diva!</em>
+      </h1>
+      <p className="mt-5 max-w-[34ch] text-[clamp(18px,1.4vw,21px)] text-[var(--ink-soft)]">
         {a.clientName.split(" ")[0]}, tu cita quedó registrada. Minerva te escribirá para confirmarla.
       </p>
-      <dl className="mt-12 grid max-w-xl gap-px bg-[var(--ground-3)]">
+      <dl className="mt-10 grid max-w-xl gap-2">
         {[
           ["Cuándo", `${prettyDate(date)}, ${prettyTime(time)}`],
           ["Servicio", services],
@@ -50,7 +52,7 @@ export default async function ListoPage({ searchParams }: { searchParams: Promis
           ["Valor aproximado", money(total)],
           ["Dónde", `${settings.address}, ${settings.city}`],
         ].map(([k, v]) => (
-          <div key={k} className="bg-[var(--ground)] py-4">
+          <div key={k} className="rounded-2xl bg-[var(--ground-2)] px-5 py-4">
             <dt className="text-[14px] text-[var(--ink-soft)]">{k}</dt>
             <dd className="text-[18px] first-letter:uppercase">{v}</dd>
           </div>

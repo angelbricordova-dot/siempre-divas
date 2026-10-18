@@ -66,7 +66,8 @@
   --color-brand-black: var(--brand-black);
   --color-brand-gold: var(--brand-gold);
   --color-brand-ivory: var(--brand-ivory);
-  --font-sans: var(--font-tiktok), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-jost), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-bodoni), "Bodoni 72", Didot, serif;
   --ease-out-strong: cubic-bezier(0.23, 1, 0.32, 1);
   --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
 }

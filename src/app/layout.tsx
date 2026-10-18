@@ -1,11 +1,14 @@
 import type { Metadata, Viewport } from "next";
-import { TikTok_Sans } from "next/font/google";
+import { Bodoni_Moda, Jost } from "next/font/google";
 import "./globals.css";
 
-const tiktok = TikTok_Sans({
+// Textos: Jost (geométrica clásica de belleza). Títulos: Bodoni Moda, la misma familia del logo.
+const jost = Jost({ subsets: ["latin"], variable: "--font-jost", display: "swap" });
+const bodoni = Bodoni_Moda({
   subsets: ["latin"],
-  axes: ["wdth"],
-  variable: "--font-tiktok",
+  style: ["normal", "italic"],
+  axes: ["opsz"],
+  variable: "--font-bodoni",
   display: "swap",
 });
 
@@ -38,7 +41,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="es-EC" className={tiktok.variable} suppressHydrationWarning>
+    <html lang="es-EC" className={`${jost.variable} ${bodoni.variable}`} suppressHydrationWarning>
       <body>{children}</body>
     </html>
   );

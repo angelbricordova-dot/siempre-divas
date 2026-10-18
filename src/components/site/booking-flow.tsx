@@ -23,6 +23,7 @@ export function BookingFlow({
   policy,
   whatsapp,
   initialService,
+  initialCategory,
   initialDate,
 }: {
   catalog: Cat[];
@@ -33,12 +34,15 @@ export function BookingFlow({
   policy: string;
   whatsapp: string;
   initialService?: number;
+  initialCategory?: number;
   initialDate?: string;
 }) {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
   const all = useMemo(() => catalog.flatMap((c) => c.services), [catalog]);
-  const initialCat = all.find((s) => s.id === initialService)?.categoryId ?? catalog[0]?.id;
+  const initialCat =
+    all.find((s) => s.id === initialService)?.categoryId ??
+    (catalog.some((c) => c.id === initialCategory) ? initialCategory : catalog[0]?.id);
   const [cat, setCat] = useState(initialCat);
   const [selected, setSelected] = useState<number[]>(initialService && all.some((s) => s.id === initialService) ? [initialService] : []);
   const [pickedStaff, setStaffId] = useState<number | null>(null);
@@ -98,7 +102,7 @@ export function BookingFlow({
     });
   }
 
-  const step = "text-[clamp(24px,2.4vw,34px)] leading-[1.1] font-semibold tracking-[-0.02em]";
+  const step = "display text-[clamp(28px,3vw,40px)]";
 
   return (
     <div className="pb-48">
@@ -112,10 +116,10 @@ export function BookingFlow({
                 key={c.id}
                 type="button"
                 onClick={() => setCat(c.id)}
-                className={cx("chip h-11 shrink-0 px-4 text-[16px]", cat === c.id ? "bg-[var(--ink)] text-[#0e0c0a]" : "bg-[var(--ground-3)]")}
+                className={cx("chip h-11 shrink-0 rounded-full px-5 text-[16px]", cat === c.id ? "bg-[var(--ink)] text-white" : "bg-[var(--ground-3)]")}
               >
                 {c.name}
-                {count > 0 && <span className="ml-1.5 text-[var(--accent)]">·{count}</span>}
+                {count > 0 && <span className="ml-1.5 text-[var(--gold-deep)]">·{count}</span>}
               </button>
             );
           })}
@@ -132,11 +136,11 @@ export function BookingFlow({
                     onClick={() => toggle(s.id)}
                     aria-pressed={on}
                     className={cx(
-                      "chip flex min-h-16 w-full items-center gap-3 px-4 py-3 text-left",
-                      on ? "bg-[var(--accent)] text-[#0e0c0a]" : "bg-[var(--ground-2)]",
+                      "chip flex min-h-16 w-full items-center gap-3 rounded-2xl px-4 py-3 text-left",
+                      on ? "bg-[var(--accent)] text-[var(--ink)]" : "bg-[var(--ground-2)]",
                     )}
                   >
-                    <span className={cx("flex h-6 w-6 shrink-0 items-center justify-center text-[15px]", on ? "bg-[#0e0c0a] text-[var(--accent)]" : "bg-[var(--ground-3)]")} aria-hidden>
+                    <span className={cx("flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-[15px]", on ? "bg-[var(--ink)] text-[var(--accent)]" : "bg-white")} aria-hidden>
                       {on && (
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
                           <path d="M5 12.5l4.5 4.5L19 7.5" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
@@ -145,7 +149,7 @@ export function BookingFlow({
                     </span>
                     <span className="flex-1">
                       <span className="block text-[16px]">{s.name}</span>
-                      <span className={cx("block text-[14px]", on ? "text-[#0e0c0a]/70" : "text-[var(--ink-soft)]")}>{s.durationMin} min</span>
+                      <span className={cx("block text-[14px]", on ? "text-[var(--ink)]/70" : "text-[var(--ink-soft)]")}>{s.durationMin} min</span>
                     </span>
                     <span className="tabular text-[16px]">
                       {s.priceFrom && <span className="text-[13px] opacity-70">desde </span>}
@@ -167,7 +171,7 @@ export function BookingFlow({
               setStaffId(null);
               setTime("");
             }}
-            className={cx("chip h-12 px-5 text-[16px]", staffId === null ? "bg-[var(--ink)] text-[#0e0c0a]" : "bg-[var(--ground-3)]")}
+            className={cx("chip h-12 rounded-full px-5 text-[16px]", staffId === null ? "bg-[var(--ink)] text-white" : "bg-[var(--ground-3)]")}
           >
             Con quien esté libre
           </button>
@@ -179,7 +183,7 @@ export function BookingFlow({
                 setStaffId(p.id);
                 setTime("");
               }}
-              className={cx("chip min-h-12 px-5 py-2 text-left text-[16px]", staffId === p.id ? "bg-[var(--ink)] text-[#0e0c0a]" : "bg-[var(--ground-3)]")}
+              className={cx("chip min-h-12 rounded-2xl px-5 py-2 text-left text-[16px]", staffId === p.id ? "bg-[var(--ink)] text-white" : "bg-[var(--ground-3)]")}
             >
               {p.name.split(" ")[0]}
               {p.specialty && <span className="block text-[13px] opacity-70">{p.specialty}</span>}
@@ -201,8 +205,8 @@ export function BookingFlow({
                 disabled={closed}
                 onClick={() => setDate(d)}
                 className={cx(
-                  "chip flex h-[76px] w-[62px] shrink-0 flex-col items-center justify-center disabled:opacity-30",
-                  date === d ? "bg-[var(--accent)] text-[#0e0c0a]" : "bg-[var(--ground-2)]",
+                  "chip flex h-[76px] w-[62px] shrink-0 flex-col items-center justify-center rounded-2xl disabled:opacity-30",
+                  date === d ? "bg-[var(--accent)] text-[var(--ink)]" : "bg-[var(--ground-2)]",
                 )}
                 aria-label={prettyDate(d)}
               >
@@ -219,9 +223,9 @@ export function BookingFlow({
           ) : slots === null ? (
             <p className="text-[16px] text-[var(--ink-soft)]">Buscando horas libres…</p>
           ) : slots.length === 0 ? (
-            <p className="bg-[var(--ground-2)] p-4 text-[16px]">
+            <p className="rounded-2xl bg-[var(--ground-2)] p-4 text-[16px]">
               Ese día ya está lleno. Prueba otro día o{" "}
-              <a className="link text-[var(--accent)]" href={waLink(whatsapp, MSG.dayFull(prettyDate(date)))} target="_blank" rel="noreferrer">
+              <a className="link text-[var(--gold-deep)]" href={waLink(whatsapp, MSG.dayFull(prettyDate(date)))} target="_blank" rel="noreferrer">
                 escríbenos por WhatsApp
               </a>
               .
@@ -241,7 +245,7 @@ export function BookingFlow({
                           key={s.time}
                           type="button"
                           onClick={() => setTime(s.time)}
-                          className={cx("chip tabular h-12 text-[16px]", time === s.time ? "bg-[var(--accent)] text-[#0e0c0a]" : "bg-[var(--ground-2)]")}
+                          className={cx("chip tabular h-12 rounded-xl text-[16px]", time === s.time ? "bg-[var(--accent)] text-[var(--ink)]" : "bg-[var(--ground-2)]")}
                         >
                           {s.time}
                         </button>
@@ -258,15 +262,15 @@ export function BookingFlow({
       <section aria-labelledby="s4" className={cx("mt-16 px-[var(--margin)] transition-opacity", !time && "pointer-events-none opacity-35")}>
         <h2 id="s4" className={step}>Tus datos</h2>
         <div className="mt-5 grid max-w-xl gap-2">
-          <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Tu nombre" autoComplete="name" className="h-14 bg-[var(--ground-2)] px-4 text-[17px] outline-none placeholder:text-[var(--ink-soft)] focus:ring-2 focus:ring-[var(--accent)]" />
-          <input value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="Tu WhatsApp (09…)" inputMode="tel" autoComplete="tel" className="h-14 bg-[var(--ground-2)] px-4 text-[17px] outline-none placeholder:text-[var(--ink-soft)] focus:ring-2 focus:ring-[var(--accent)]" />
-          <input value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="¿Algo que debamos saber? (opcional)" className="h-14 bg-[var(--ground-2)] px-4 text-[17px] outline-none placeholder:text-[var(--ink-soft)] focus:ring-2 focus:ring-[var(--accent)]" />
+          <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Tu nombre" autoComplete="name" className="h-14 rounded-xl bg-[var(--ground-2)] px-4 text-[17px] outline-none placeholder:text-[var(--ink-soft)] focus:ring-2 focus:ring-[var(--accent)]" />
+          <input value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="Tu WhatsApp (09…)" inputMode="tel" autoComplete="tel" className="h-14 rounded-xl bg-[var(--ground-2)] px-4 text-[17px] outline-none placeholder:text-[var(--ink-soft)] focus:ring-2 focus:ring-[var(--accent)]" />
+          <input value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="¿Algo que debamos saber? (opcional)" className="h-14 rounded-xl bg-[var(--ground-2)] px-4 text-[17px] outline-none placeholder:text-[var(--ink-soft)] focus:ring-2 focus:ring-[var(--accent)]" />
           <input value={trap} onChange={(e) => setTrap(e.target.value)} name="website" tabIndex={-1} autoComplete="off" className="hidden" aria-hidden />
           <p className="mt-2 text-[15px] text-[var(--ink-soft)]">{policy}</p>
         </div>
       </section>
 
-      <div className="fixed inset-x-0 bottom-0 z-40 bg-[var(--ground)] px-[var(--margin)] pt-3 pb-[max(env(safe-area-inset-bottom),14px)]" style={{ boxShadow: "0 -1px 0 var(--ground-3)" }}>
+      <div className="fixed inset-x-0 bottom-0 z-40 bg-white px-[var(--margin)] pt-3 pb-[max(env(safe-area-inset-bottom),14px)]" style={{ boxShadow: "0 -1px 0 var(--ground-4)" }}>
         <div className="mx-auto flex max-w-5xl items-center gap-4">
           <div className="min-w-0 flex-1">
             {chosen.length ? (
@@ -283,7 +287,7 @@ export function BookingFlow({
             ) : (
               <p className="text-[15px] text-[var(--ink-soft)]">Elige uno o varios servicios</p>
             )}
-            {error && <p className="mt-1 text-[14px] text-[#ff9a8f]">{error}</p>}
+            {error && <p className="mt-1 text-[14px] text-[#b3261e]">{error}</p>}
           </div>
           <button type="button" disabled={!ready || pending} onClick={submit} className="btn shrink-0 disabled:opacity-40">
             {pending ? "Reservando…" : "Confirmar"}

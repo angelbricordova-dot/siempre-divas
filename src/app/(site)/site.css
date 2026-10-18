@@ -1,42 +1,50 @@
-/* Web pública: negro, hueso y dorado de la marca. */
+/* Web pública: blanco y dorado. Títulos en Bodoni Moda (como el logo), textos en Jost. */
 body:has(.site) {
-  background: #0e0c0a;
+  background: #ffffff;
 }
 
 .site {
-  --ground: #0e0c0a;
-  --ground-2: #1a1714;
-  --ground-3: #252019;
-  --ink: #ecebe7;
-  --ink-soft: #b9afa3;
-  --accent: #c9a45c;
-  --accent-strong: #dcb86f;
+  /* Tonos del blanco al dorado */
+  --ground: #ffffff;
+  --ground-2: #fbf8f2; /* blanco cálido */
+  --ground-3: #f4ecdd; /* champán */
+  --ground-4: #ead9b8; /* dorado pálido */
+  --accent: #c9a45c; /* dorado de la marca */
+  --accent-strong: #b8914a;
+  --gold-deep: #8c6a2e; /* dorado para texto sobre blanco */
+  --ink: #1f1b16;
+  --ink-soft: #6e6458;
+  --on-accent: #1f1b16;
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-soft: cubic-bezier(0.33, 1, 0.68, 1);
-  --margin: clamp(20px, 2.2vw, 32px);
-  --step-small: clamp(0.8125rem, 0.79rem + 0.1vw, 0.875rem);
-  --step-body: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem);
-  --step-lead: clamp(1.25rem, 1.1rem + 0.7vw, 1.625rem);
-  --step-head: clamp(2rem, 1.3rem + 3.2vw, 4rem);
+  --margin: clamp(20px, 4vw, 56px);
   background: var(--ground);
   color: var(--ink);
-  font-size: var(--step-body);
-  line-height: 1.45;
+  font-family: var(--font-sans);
+  font-size: clamp(1.0625rem, 1rem + 0.2vw, 1.1875rem);
+  line-height: 1.55;
   min-height: 100svh;
   overflow-x: clip;
-  color-scheme: dark;
+  color-scheme: light;
 }
 
 .site a {
   color: inherit;
 }
 
-.site .wide {
-  font-stretch: 150%;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: -0.01em;
-  line-height: 0.82;
+/* Títulos en Bodoni Moda */
+.site .display {
+  font-family: var(--font-display);
+  font-weight: 400;
+  letter-spacing: -0.015em;
+  line-height: 1.02;
+}
+.site .display em {
+  font-style: italic;
+}
+
+.site .gold {
+  color: var(--gold-deep);
 }
 
 .site .btn {
@@ -45,11 +53,12 @@ body:has(.site) {
   justify-content: center;
   gap: 0.5em;
   min-height: 52px;
-  padding: 0 26px;
+  padding: 0 28px;
+  border-radius: 999px;
   background: var(--accent);
-  color: #0e0c0a;
-  font-weight: 600;
-  border-radius: 0;
+  color: var(--on-accent);
+  font-weight: 500;
+  letter-spacing: 0.01em;
   text-decoration: none;
   transition:
     transform 140ms var(--ease-out),
@@ -58,100 +67,84 @@ body:has(.site) {
 .site .btn:active {
   transform: scale(0.97);
 }
-.site .btn-ghost {
+.site .btn-soft {
   background: var(--ground-3);
   color: var(--ink);
+}
+.site .btn-dark {
+  background: var(--ink);
+  color: #fff;
 }
 
 .site .link {
   text-decoration: underline;
   text-decoration-color: transparent;
-  text-underline-offset: 0.2em;
-  text-decoration-thickness: 0.07em;
-  transition: text-decoration-color 180ms ease, color 180ms ease;
+  text-underline-offset: 0.22em;
+  text-decoration-thickness: 1px;
+  transition:
+    text-decoration-color 180ms ease,
+    color 180ms ease;
 }
 
 @media (hover: hover) and (pointer: fine) {
   .site .btn:hover {
     background: var(--accent-strong);
   }
-  .site .btn-ghost:hover {
-    background: #322b22;
+  .site .btn-soft:hover {
+    background: var(--ground-4);
+  }
+  .site .btn-dark:hover {
+    background: #3a332a;
   }
   .site .link:hover {
     text-decoration-color: currentColor;
   }
-  .site .name-link:hover {
-    color: var(--ink);
+  .site .tile:hover {
+    background: var(--ground-4);
+  }
+  .site .work:hover img {
+    transform: scale(1.04);
   }
 }
 
 .site :focus-visible {
-  outline: 2px solid var(--accent);
+  outline: 2px solid var(--gold-deep);
   outline-offset: 3px;
-}
-
-/* La palabra gigante del inicio */
-.site .monument {
-  font-size: clamp(200px, 29vw, 520px);
-  white-space: nowrap;
-  color: var(--accent);
-}
-
-@supports (animation-timeline: scroll()) {
-  @media (prefers-reduced-motion: no-preference) {
-    .site .monument {
-      animation: monument-scale linear both;
-      animation-timeline: scroll(root);
-      animation-range: 0 100vh;
-      transform-origin: 30% 100%;
-    }
-    @keyframes monument-scale {
-      to {
-        transform: scale(0.94) translateY(2%);
-      }
-    }
-    .site .footer-mark {
-      animation: footer-grow linear both;
-      animation-timeline: view();
-      animation-range: entry 0% entry 100%;
-      transform-origin: 50% 100%;
-    }
-    @keyframes footer-grow {
-      from {
-        transform: scale(0.94);
-      }
-    }
-  }
 }
 
 /* Entradas: solo con JS; sin JS todo se ve. */
 @media (prefers-reduced-motion: no-preference) {
   .js .site [data-rise] {
     opacity: 0;
-    transform: translateY(18px);
+    transform: translateY(16px);
     animation: site-rise 800ms var(--ease-out) forwards;
-    animation-delay: calc(var(--i, 0) * 90ms + 120ms);
+    animation-delay: calc(var(--i, 0) * 90ms + 100ms);
   }
   .js .site [data-reveal] {
     opacity: 0;
-    transform: translateY(24px);
+    transform: translateY(22px);
     transition:
       opacity 700ms var(--ease-out),
       transform 900ms var(--ease-out);
-    transition-delay: calc(var(--i, 0) * 75ms);
+    transition-delay: calc(var(--i, 0) * 70ms);
   }
   .js .site [data-reveal].is-in {
     opacity: 1;
     transform: none;
   }
-  .js .site .monument-wrap {
+  .js .site .hero-art {
     opacity: 0;
-    transform: translateY(6%);
-    animation: site-rise 1100ms var(--ease-out) 60ms forwards;
+    transform: scale(1.03);
+    animation: site-settle 1200ms var(--ease-soft) 150ms forwards;
   }
 }
 @keyframes site-rise {
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes site-settle {
   to {
     opacity: 1;
     transform: none;
@@ -172,31 +165,49 @@ body:has(.site) {
   transform: rotate(45deg);
 }
 
-.site .strip {
-  scrollbar-width: none;
-  scroll-snap-type: x mandatory;
-}
-.site .strip::-webkit-scrollbar {
-  display: none;
-}
-.site .strip > * {
-  scroll-snap-align: start;
-}
-.site .frame img {
-  transition: transform 250ms var(--ease-out);
-}
-@media (hover: hover) and (pointer: fine) {
-  .site .frame:hover img {
-    transform: scale(1.1);
-  }
-}
-
+.site .tile,
 .site .chip {
   transition:
     background-color 160ms ease,
     color 160ms ease,
     transform 140ms var(--ease-out);
 }
+.site .tile:active,
 .site .chip:active {
-  transform: scale(0.97);
+  transform: scale(0.98);
+}
+
+.site .work img {
+  transition: transform 500ms var(--ease-soft);
+}
+
+.site .no-scrollbar {
+  scrollbar-width: none;
+}
+.site .no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Visor de fotos */
+.site .viewer {
+  animation: site-fade 200ms ease-out;
+}
+.site .viewer img {
+  animation: site-zoom 320ms var(--ease-out);
+}
+@keyframes site-fade {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes site-zoom {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .site .viewer img {
+    animation: site-fade 160ms ease-out;
+  }
 }

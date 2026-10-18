@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useEffect, useRef, useState } from "react";
+import { startTransition, useActionState, useEffect, useRef, useState } from "react";
 import { FormMessage } from "@/components/admin/client-ui";
 import { Field, inputClass, textareaClass } from "@/components/ui";
 import { savePromo, uploadGallery } from "./actions";
@@ -30,12 +30,12 @@ function useCompressedSubmit(action: (fd: FormData) => void, field: string) {
     fd.delete(field);
     for (const f of files) fd.append(field, await compress(f));
     setBusy(false);
-    action(fd);
+    startTransition(() => action(fd));
   }
   return { busy, onSubmit };
 }
 
-export function GalleryUpload() {
+export function GalleryUpload({ categories, staff }: { categories: { id: number; name: string }[]; staff: { id: number; name: string }[] }) {
   const [state, action, pending] = useActionState(uploadGallery, null);
   const ref = useRef<HTMLFormElement>(null);
   const { busy, onSubmit } = useCompressedSubmit(action, "files");
@@ -44,12 +44,39 @@ export function GalleryUpload() {
   }, [state]);
   return (
     <form ref={ref} onSubmit={onSubmit} className="space-y-3">
-      <label className="flex h-28 cursor-pointer flex-col items-center justify-center rounded-2xl bg-surface-2 text-center text-[15px] text-muted">
+      <label className="flex h-28 cursor-pointer flex-col items-center justify-center rounded-2xl bg-surface-2 text-center text-[15px] text-muted has-[:valid]:bg-gold-soft">
         <span className="text-[17px] font-semibold text-gold">Elegir fotos</span>
-        <span>de tus trabajos (uñas, cabello, maquillaje)</span>
-        <input type="file" name="files" accept="image/*" multiple className="sr-only" />
+        <span>puedes elegir varias a la vez</span>
+        <input type="file" name="files" accept="image/*" multiple required className="sr-only" />
       </label>
-      <input name="alt" placeholder="Descripción corta (ej: uñas acrílicas francesas)" className={inputClass} />
+      <div className="grid grid-cols-2 gap-2">
+        <select name="categoryId" className={inputClass} defaultValue="" aria-label="Tipo de trabajo" required>
+          <option value="" disabled>
+            Tipo de trabajo
+          </option>
+          {categories.map((c) => (
+            <option key={c.id} value={c.id}>
+              {c.name}
+            </option>
+          ))}
+        </select>
+        <select name="staffId" className={inputClass} defaultValue="" aria-label="Quién lo hizo">
+          <option value="">¿Quién lo hizo?</option>
+          {staff.map((s) => (
+            <option key={s.id} value={s.id}>
+              {s.name}
+            </option>
+          ))}
+        </select>
+      </div>
+      <input name="alt" placeholder="Descripción (ej: corte bob con mechas miel)" className={inputClass} />
+      <label className="flex items-center justify-between rounded-xl bg-surface-2 px-4 py-3 text-[16px]">
+        <span>
+          Destacar en la portada
+          <span className="block text-[13px] text-muted">Las destacadas salen primero</span>
+        </span>
+        <input type="checkbox" name="featured" className="h-6 w-6 accent-[var(--gold)]" />
+      </label>
       <FormMessage state={state} />
       <button disabled={busy || pending} className="press h-14 w-full rounded-xl bg-gold text-[17px] font-semibold text-on-gold disabled:opacity-50">
         {busy ? "Preparando…" : pending ? "Subiendo…" : "Subir a la galería"}

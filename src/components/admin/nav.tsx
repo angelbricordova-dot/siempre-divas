@@ -44,7 +44,7 @@ export const ownerMenu = [
   { href: "/admin/reportes", label: "Reportes", icon: IconChart },
   { href: "/admin/servicios", label: "Servicios y precios", icon: IconScissors },
   { href: "/admin/equipo", label: "Equipo", icon: IconUsers },
-  { href: "/admin/web", label: "Promos y galería", icon: IconGlobe },
+  { href: "/admin/web", label: "Trabajos y promos", icon: IconGlobe },
   { href: "/admin/ajustes", label: "Ajustes", icon: IconSettings },
 ];
 

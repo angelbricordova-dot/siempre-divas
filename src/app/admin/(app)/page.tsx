@@ -160,6 +160,8 @@ async function OwnerHome({ user }: { user: CurrentUser }) {
           <ButtonLink href="/admin/gastos" variant="secondary" size="lg">Anotar gasto</ButtonLink>
           <ButtonLink href="/admin/cierre" variant="secondary" size="lg">Cierre de caja</ButtonLink>
           <ButtonLink href="/admin/clientes" variant="secondary" size="lg">Clientas</ButtonLink>
+          <ButtonLink href="/admin/web" variant="secondary" size="lg">Subir fotos</ButtonLink>
+          <ButtonLink href="/admin/reportes" variant="secondary" size="lg">Reportes</ButtonLink>
         </div>
       </Section>
     </>

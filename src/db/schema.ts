@@ -237,6 +237,10 @@ export const media = pgTable("media", {
   width: integer("width"),
   height: integer("height"),
   alt: text("alt"),
+  // Para la galería de trabajos: de qué tipo es y quién lo hizo.
+  categoryId: integer("category_id").references(() => serviceCategories.id, { onDelete: "set null" }),
+  staffId: integer("staff_id").references(() => staff.id, { onDelete: "set null" }),
+  featured: boolean("featured").notNull().default(false),
   sort: integer("sort").notNull().default(0),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 });

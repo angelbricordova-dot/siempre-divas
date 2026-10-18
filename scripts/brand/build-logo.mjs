@@ -23,6 +23,8 @@ fs.mkdirSync(OUT, { recursive: true });
 const GOLD = "#C9A45C";
 const INK = "#0E0C0A";
 const IVORY = "#F4EEE6";
+// Dorado profundo: se lee mejor sobre fondo blanco.
+const GOLD_DEEP = "#A07A36";
 
 
 /** Trazo de un texto letra por letra (evita un error de opentype.js con algunas letras). */
@@ -195,6 +197,9 @@ const files = {
   "logo-gold.svg": stacked(GOLD),
   "logo-ivory.svg": stacked(IVORY),
   "logo-ink.svg": stacked(INK),
+  "logo-deep.svg": stacked(GOLD_DEEP),
+  "logo-horizontal-deep.svg": horizontal(GOLD_DEEP),
+  "monogram-deep.svg": monogram(GOLD_DEEP),
   "logo-horizontal-gold.svg": horizontal(GOLD),
   "logo-horizontal-ivory.svg": horizontal(IVORY),
   "logo-horizontal-ink.svg": horizontal(INK),

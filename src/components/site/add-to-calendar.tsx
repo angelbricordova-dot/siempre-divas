@@ -31,7 +31,7 @@ export function AddToCalendar({ title, start, end, location }: { title: string; 
     URL.revokeObjectURL(url);
   }
   return (
-    <button type="button" onClick={download} className="btn btn-ghost">
+    <button type="button" onClick={download} className="btn btn-soft">
       Guardar en mi calendario
     </button>
   );

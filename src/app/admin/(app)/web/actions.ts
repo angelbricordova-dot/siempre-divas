@@ -7,11 +7,16 @@ import { assertOwner } from "@/lib/auth";
 
 const MAX_BYTES = 2_500_000;
 
-async function storeImage(file: File, kind: "gallery" | "promo", alt: string | null) {
+type Extra = { categoryId?: number | null; staffId?: number | null; featured?: boolean };
+
+async function storeImage(file: File, kind: "gallery" | "promo", alt: string | null, extra: Extra = {}) {
   if (!file.type.startsWith("image/")) throw new Error("El archivo no es una imagen.");
   if (file.size > MAX_BYTES) throw new Error("La imagen es muy pesada (máximo 2,5 MB).");
   const buf = Buffer.from(await file.arrayBuffer());
-  const [m] = await db.insert(schema.media).values({ kind, mime: file.type, data: buf, alt }).returning({ id: schema.media.id });
+  const [m] = await db
+    .insert(schema.media)
+    .values({ kind, mime: file.type, data: buf, alt, ...extra })
+    .returning({ id: schema.media.id });
   return m.id;
 }
 
@@ -21,12 +26,32 @@ export async function uploadGallery(_: unknown, formData: FormData) {
     const files = formData.getAll("files").filter((f): f is File => f instanceof File && f.size > 0);
     if (!files.length) return { error: "Elige al menos una foto." };
     const alt = String(formData.get("alt") ?? "").trim() || null;
-    for (const f of files) await storeImage(f, "gallery", alt);
+    const extra = {
+      categoryId: Number(formData.get("categoryId")) || null,
+      staffId: Number(formData.get("staffId")) || null,
+      featured: formData.get("featured") === "on",
+    };
+    for (const f of files) await storeImage(f, "gallery", alt, extra);
     revalidatePath("/", "layout");
     return { ok: files.length === 1 ? "Foto agregada." : `${files.length} fotos agregadas.` };
   } catch (e) {
     return { error: e instanceof Error ? e.message : "No se pudo subir" };
   }
+}
+
+export async function updateWork(formData: FormData) {
+  await assertOwner();
+  const id = Number(formData.get("id"));
+  await db
+    .update(schema.media)
+    .set({
+      alt: String(formData.get("alt") ?? "").trim() || null,
+      categoryId: Number(formData.get("categoryId")) || null,
+      staffId: Number(formData.get("staffId")) || null,
+      featured: formData.get("featured") === "on",
+    })
+    .where(eq(schema.media.id, id));
+  revalidatePath("/", "layout");
 }
 
 export async function deleteMedia(formData: FormData) {

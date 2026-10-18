@@ -2,7 +2,7 @@
 
 Página web y app de administración del salón de belleza **Siempre Divas** (Guayaquil, Ecuador).
 
-- **Web pública** (`/`): servicios y precios, promos, equipo, preguntas frecuentes, contacto y **reserva de citas en línea** (`/reservar`).
+- **Web pública** (`/`), en blanco y dorado: galería de **trabajos** con filtros por tipo y visor de fotos (`/trabajos`), servicios y precios, promos, equipo, preguntas frecuentes, contacto y **reserva de citas en línea** (`/reservar`).
 - **App de administración** (`/admin`): pensada para usarse desde el celular e instalable como app (PWA).
 
 ## Qué resuelve para Minerva
@@ -43,7 +43,7 @@ Página web y app de administración del salón de belleza **Siempre Divas** (Gu
 - **Gastos** por categoría y **Ganancia neta** (parte del salón − gastos).
 - **Cierre de caja**: cuánto efectivo debe haber y la diferencia con lo contado.
 - **Reportes**: por día, semana o mes, por trabajadora, servicios más pedidos y medios de pago. Se exportan a Excel (CSV).
-- **Servicios y precios**, **Equipo** (porcentaje, días libres, especialidades, color y acceso a la app) y **Promos y galería**. Lo que se cambie aquí se publica en la web al instante; las fotos se suben desde el celular y se comprimen solas.
+- **Servicios y precios**, **Equipo** (nombre, apellido, cargo, porcentaje, días libres, color y acceso a la app) y **Trabajos y promos**: las fotos se suben desde el celular, se comprimen solas y se clasifican por tipo (cabello, uñas…) y por quién las hizo. Las destacadas salen en la portada. Todo se publica en la web al instante.
 - **Avisos**: WhatsApp a la dueña (gratis, vía CallMeBot) y notificaciones push en la app instalada.
 - Roles: la **dueña** ve todo; cada **trabajadora** ve solo su agenda y lo que ella gana.
 
@@ -83,7 +83,7 @@ Página web y app de administración del salón de belleza **Siempre Divas** (Gu
 1. Revisa **Servicios y precios**. Los precios iniciales son de ejemplo, así que cámbialos por los reales.
 2. Agrega a tu **Equipo** con su porcentaje, sus días libres, lo que sabe hacer y, si quieres, su usuario y clave.
 3. Ajusta el **horario del salón** en *Ajustes*.
-4. Sube fotos de tus trabajos en **Promos y galería**. La galería aparece en la web cuando hay 3 fotos o más.
+4. Sube fotos de tus trabajos en **Trabajos y promos** (tipo de trabajo, quién lo hizo y si va destacada). Aparecen al instante en la portada y en `/trabajos`.
 
 ## Desarrollo local
 
@@ -108,4 +108,8 @@ El logo es 100 % vectorial (`public/brand/`), con el texto convertido a trazos. 
 - `logo-horizontal-*.svg`: en una línea.
 - `monogram-*.svg` y `app-icon.svg`: la D con corona.
 
-Cada una existe en dorado, marfil y negro. Tipografía del logo: Bodoni Moda (OFL). Tipografía de la web y la app: TikTok Sans (OFL).
+Cada una existe en dorado, dorado profundo (para fondo blanco), marfil y negro.
+
+Tipografía: Bodoni Moda (la del logo) en los títulos y Jost en los textos, ambas con licencia OFL. Colores de la web: blanco, champán y dorado (`#C9A45C`), con dorado profundo (`#8C6A2E`) para textos.
+
+Para probar el panel paso a paso: [`docs/probar-panel.md`](docs/probar-panel.md).

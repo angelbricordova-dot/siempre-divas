@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   description: "Elige tu servicio, el día y la hora. Te confirmamos por WhatsApp.",
 };
 
-export default async function ReservarPage({ searchParams }: { searchParams: Promise<{ s?: string; d?: string }> }) {
+export default async function ReservarPage({ searchParams }: { searchParams: Promise<{ s?: string; d?: string; cat?: string }> }) {
   const sp = await searchParams;
   const [settings, catalog, staff] = await Promise.all([getSettings(), listCatalog({ onlyActive: true }), listStaff({ includeOwner: true })]);
   const menu = catalog
@@ -33,18 +33,20 @@ export default async function ReservarPage({ searchParams }: { searchParams: Pro
 
   return (
     <main>
-      <header className="flex items-center justify-between px-[var(--margin)] pt-[max(env(safe-area-inset-top),20px)]">
+      <header className="flex items-center justify-between px-[var(--margin)] pt-[max(env(safe-area-inset-top),16px)] pb-2">
         <Link href="/" aria-label="Volver al inicio">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/brand/logo-horizontal-ivory.svg" alt="Siempre Divas" className="h-9 w-auto" />
+          <img src="/brand/logo-horizontal-deep.svg" alt="Siempre Divas" className="h-9 w-auto" />
         </Link>
         <a href={waLink(settings.whatsapp)} target="_blank" rel="noreferrer" className="link tabular text-[16px]">
           {prettyPhone(settings.whatsapp)}
         </a>
       </header>
-      <div className="px-[var(--margin)] pt-14 pb-12">
-        <h1 className="wide text-[clamp(56px,12vw,160px)] text-[var(--accent)]">Tu cita</h1>
-        <p className="mt-5 max-w-[40ch] text-[var(--step-lead)] leading-[1.3]">
+      <div className="px-[var(--margin)] pt-10 pb-10">
+        <h1 className="display text-[clamp(46px,7vw,96px)]">
+          Reserva tu <em className="gold">cita</em>
+        </h1>
+        <p className="mt-4 max-w-[40ch] text-[clamp(18px,1.4vw,21px)] text-[var(--ink-soft)]">
           Elige el servicio, el día y la hora. Minerva te confirma por WhatsApp.
         </p>
       </div>
@@ -58,11 +60,12 @@ export default async function ReservarPage({ searchParams }: { searchParams: Pro
           policy={settings.bookingPolicy}
           whatsapp={settings.whatsapp}
           initialService={Number(sp.s) || undefined}
+          initialCategory={Number(sp.cat) || undefined}
           initialDate={sp.d && /^\d{4}-\d{2}-\d{2}$/.test(sp.d) ? sp.d : undefined}
         />
       ) : (
         <div className="px-[var(--margin)] pb-24">
-          <p className="text-[var(--step-lead)]">Por ahora agendamos solo por WhatsApp.</p>
+          <p className="text-[20px]">Por ahora agendamos solo por WhatsApp.</p>
           <a href={waLink(settings.whatsapp, MSG.book)} className="btn mt-6" target="_blank" rel="noreferrer">
             Escribir por WhatsApp
           </a>
