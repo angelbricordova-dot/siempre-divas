@@ -72,6 +72,16 @@ Página web y app de administración del salón de belleza **Siempre Divas** (Gu
 5. Entra a `https://tu-dominio/admin` con el usuario `minerva` y la clave de `ADMIN_PASSWORD`.
 6. En el celular de Minerva, abre `/admin` y elige **«Agregar a pantalla de inicio»** para usarlo como app.
 
+### Si la página muestra un error
+
+Abre **`https://tu-dominio/api/health`**. Muestra qué está bien (✅) y qué falta (❌), sin enseñar claves:
+
+- **❌ DATABASE_URL**: la base de datos no está conectada a ese despliegue. En Vercel ve a *Storage* y conecta Neon marcando **Production y Preview*. Los despliegues desde una rama que no es la principal son *Preview*. Luego vuelve a desplegar.
+- **❌ AUTH_SECRET**: agrégala en *Settings → Environment Variables* y vuelve a desplegar.
+- **❌ cuenta_duena**: agrega `ADMIN_PASSWORD` y vuelve a abrir `/api/health`.
+
+No hace falta correr migraciones a mano: si la base de datos está vacía, la app crea las tablas, el catálogo y la cuenta de Minerva sola en la primera visita.
+
 ### WhatsApp automático a la dueña (gratis)
 
 1. En la app: *Más → Ajustes → Avisos a tu WhatsApp*.

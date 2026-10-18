@@ -3,6 +3,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { eq } from "drizzle-orm";
 import { db, schema } from "@/db";
+import { ensureDatabase } from "./bootstrap";
 import { SESSION_COOKIE, SESSION_DAYS, signSession, verifySession } from "./session";
 
 export type CurrentUser = {
@@ -17,6 +18,7 @@ export async function getCurrentUser(): Promise<CurrentUser | null> {
   const token = (await cookies()).get(SESSION_COOKIE)?.value;
   const session = await verifySession(token);
   if (!session) return null;
+  await ensureDatabase();
   const [row] = await db.select().from(schema.staff).where(eq(schema.staff.id, session.uid));
   if (!row || !row.active || !row.passwordHash) return null;
   return {

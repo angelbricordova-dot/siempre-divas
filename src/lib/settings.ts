@@ -2,9 +2,11 @@ import "server-only";
 import { eq } from "drizzle-orm";
 import { db, schema } from "@/db";
 import type { Settings } from "@/db/schema";
+import { ensureDatabase } from "./bootstrap";
 import { DEFAULT_SETTINGS } from "./defaults";
 
 export async function getSettings(): Promise<Settings> {
+  await ensureDatabase();
   const [row] = await db.select().from(schema.settings).where(eq(schema.settings.id, 1));
   return { ...DEFAULT_SETTINGS, ...(row?.data ?? {}) };
 }
